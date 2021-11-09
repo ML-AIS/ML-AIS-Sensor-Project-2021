@@ -8,7 +8,7 @@ The table below shows milestones, which we have to achieve. There maybe some cha
 
 | Task No. 	| Task Description                                                                                                                              	| Date             	| Remarks 	|
 |----------	|-----------------------------------------------------------------------------------------------------------------------------------------------	|------------------	|---------	|
-| a        	| Getting familiar with the measurement equipment                                                                                               	| 29/10/2021 (FRI) 	| Done on 29/10/2021	|
+| a        	| Getting familiar with the measurement equipment                                                                                               	| 29/10/2021 (FRI) 	| Done on 05/11/2021	|
 | b        	| 1.) Collect data set#1                                                                                                      	| 20/11/2021 (SAT) 	|         	|
 | c        	| 1.) Evaluation of data set#1    2.) Submit Confusion Matrix                                                                                      	| 27/11/2021 (SAT) 	|         	|
 | d        	| 1.) Adjust the thresholds of feature #1 and feature #10 in order to get a higher TPR (true positive rate) and lower FPR (false negative rate).  2.) Submit data set #2 and the confusion matrix of data set #2. 	| 18/12/2021       	|         	|
