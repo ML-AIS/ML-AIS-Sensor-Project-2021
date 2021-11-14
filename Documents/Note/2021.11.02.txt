@@ -1,0 +1,44 @@
+Person --> Seat --> measurement 2s
+
+Measuring 1s --> Sensor measures 10/s --> 10 Measurements (10 Scans) --> ADC--> 10x16384 
+
+
+(
+    AD Sampling rate = 1,95 MHz 1,95M [sampling/s] --> sampling time [approx.] 0.5 microsec. 
+    buffer length 16384 --> 16374 x 0.5 microsec. --> approx 8ms. signal length
+    12 bit ADC Voltage 
+
+    We will have 16384 voltage at the time length 8ms length
+
+    we have to divide time length by two for Round trip time, since it is a reflection from ultrasonic.
+
+    we have to calculate the time for reflection too.
+
+    we get only 1 RED Pitaya board.
+
+    40 KHz ultrasonic wave in air 
+    
+)
+
+
+
+Measuring 2s --> 20 Measurements (20 Scans)
+
+1000 x Measuring 2s --> 20,000 Scans (Person on the seat)
++
+1000 x Measuring 2s --> 20,000 Scans (Empty seat)
+
+Persons : Multiple people up to 10?
+
+Clothes : More various type 
+
+
+
+
+
+
+
+
+
+
+
