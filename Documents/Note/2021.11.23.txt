@@ -1,0 +1,20 @@
+2021.11.23
+
+1. Do we need ADC Data?
+--> Yes Task 1 need ADC data and also FFT data
+
+2. New GUI version (Version 2021.11.22 ) is uploaded and is preferred to be used.
+3. New GUI explanation is scheduled on 24.11.2021 (Wed) on Zoom Meeting
+4. Check if converting from txt to excel is possible (ADC txt --> excel), since prof. found overflow.
+5. We do not need to use logging button on the GUI
+6. There is still a problem on ADC on RP top one. It cannot transmit binary.
+7. First experiment, just do it with FFT Task 1 by Prof.
+8. Postpone the submission of confusion matrix #1
+9. All acculumated measurements for every variations must exceed 20k measurements 
+10. We can measure Empty seat for 20 - 25 seconds 
+11. We have to measure 2s each for human
+12. It is expected to have 200 measurements per minute when do the experiment
+13. We may not have to use 2nd sensor ( for task 1 ), it's better to use it. The main sensor is the 1st one.
+14. Additional timeslot will be provided.
+15.
+16. 
