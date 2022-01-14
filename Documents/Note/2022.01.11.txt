@@ -1,0 +1,7 @@
+
+Note 2021.12.12 (SAT)
+
+1.) Prof. want us to delete 10 rows of data in each measurement time out (measurement time = 1 click of record), leave other files untouched.
+2.) Create Confusion Matrix again and then submit
+3.) Next week, there will be a timeslot for measurement again.
+4.) New folder name = Old folder name + proc
