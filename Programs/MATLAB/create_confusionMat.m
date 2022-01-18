@@ -25,7 +25,10 @@ num_fileswithoutheaders = 0;
 
 %%
 % Keyword for search
-path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/";
+% path of normal files
+%path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/";
+% path of processed files with deleting first 10 rows of data
+path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/proc/";
 keyword = "**/FFT_*.txt";
 
 
@@ -38,6 +41,13 @@ for index = 1:size(listdir)
     
     % 2. Check if file has headers field
     content = readmatrix(fullfilepath);
+    
+    % guard for empty file
+    if isempty(content)
+        num_fileswithoutheaders = num_fileswithoutheaders + 1;
+        continue;
+    end
+    
     
     checkones = all(content(:,1) == 64);
     
@@ -53,6 +63,7 @@ for index = 1:size(listdir)
         % --------------------------------------
         for jndex = 1:size(content, 1)
             classification = content(jndex, 3);
+            
             
             % check keyword
             % 1. Empty "E"
