@@ -4,8 +4,11 @@
 % 3.) write new file with new folder name
 
 
-input_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1\";
-output_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1\proc\";
+% input_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1\";
+% output_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1\proc\";
+
+input_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold\";
+output_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc\";
 
 keyword = "**/FFT_*.txt";
 del_row = 10;
