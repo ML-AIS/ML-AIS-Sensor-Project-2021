@@ -26,15 +26,20 @@ num_fileswithoutheaders = 0;
 %%
 % Keyword for search
 % path of normal files
-%path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/";
+path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/";
 % path of processed files with deleting first 10 rows of data
-path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/proc/";
-keyword = "**/FFT_*.txt";
+% path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/proc/";
+keyword = "**/FFT_*.txt"; % change this keyword to filter files according to case.
 
 
 path_with_key = path+keyword;
 % 1. List file paths with keyword
 listdir = dir(path_with_key);
+
+% Declare array to contain actual result and classified results 
+result_actual = strings(size(listdir, 1), 1);
+result_classified = strings(size(result_actual, 1), 1);
+counter = 1;
 
 for index = 1:size(listdir)
     fullfilepath = fullfile(listdir(index).folder, listdir(index).name);
@@ -66,33 +71,50 @@ for index = 1:size(listdir)
             
             
             % check keyword
-            % 1. Empty "E"
+            % 1. Empty "Empty Seat"
             if contains(fullfilepath, "FFT_E")
                 
+                result_actual(counter) = "Empty Seat";
+                
+                % Classification 
+                % 1 : Empty
+                % 2 : Human
                 switch classification
                     case 1
                         TP = TP + 1;
+                        result_classified(counter) = "Empty Seat";
                     case 2
                         FN = FN + 1; % Empty -> Not Empty
+                        result_classified(counter) = "Human";
                     otherwise
                         disp("Problem with Switch Case E condition");
                 end
                 
+                counter = counter + 1;
+                
             elseif contains(fullfilepath, "FFT_H")
                 
+                result_actual(counter) = "Human";
+                
+                % Classification 
+                % 1 : Empty
+                % 2 : Human
                 switch classification
                     case 1
                         FP = FP + 1; % Not Empty -> Empty FP
+                        result_classified(counter) = "Empty Seat";
                     case 2
                         TN = TN + 1;
+                        result_classified(counter) = "Human";
                     otherwise
                         disp("Problem with Switch Case H condition");
                 end
                 
+                counter = counter + 1;
+                
             else
-                disp("Houstan, we have a big problem!!!");
+                disp("This is a problem !!!");
             end
-            
             
         end
         
@@ -105,10 +127,23 @@ end
 
 
 % Create Confusion Matrix
-C = [TP FP; FN TN];
-label = {'Empty Seat'; 'Human'};
-cm = confusionchart(C, label);
-cm.Title = 'Confusion Matrix of Empty Seat and Human Detection';
+% 1. Change array type from string array to categorical
+% 2. plot confusion Matrix
+result_actual = categorical(result_actual);
+result_classified = categorical(result_classified);
+
+plotconfusion(result_classified, result_actual);
+
+% Evaluation
+accuracy = sum(result_classified == result_actual)/numel(result_actual);
+precision = TP/(TP+FP);
+recall= TP/(TP+FN);
+F_score=2*recall*precision/(precision+recall);
+
+disp("accuracy : " + accuracy);
+disp("precision : " + precision);
+disp("recall : " + recall);
+disp("F_score : " + F_score);
 
 
 toc
