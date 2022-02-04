@@ -31,7 +31,7 @@ num_fileswithoutheaders = 0;
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/160,14000/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/160,16000/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/160,20000/";
-path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/180,10000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/180,10000/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/180,12000/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/180,14000/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold/200,10000/";
@@ -43,6 +43,17 @@ path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Se
 % path of processed files with deleting first 10 rows of data
 % path = "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/Sensor-1/proc/";
 % path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/160,12000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/160,14000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/160,16000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/160,20000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/180,10000/";
+path = "C:\workspace\FRA-UAxS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/180,12000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/180,14000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/200,10000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/200,12000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/200,14000/";
+% path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold_proc/250,15000/";
 
 
 
