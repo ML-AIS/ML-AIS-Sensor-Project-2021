@@ -8,7 +8,7 @@
     "Sheet_mgn":
     {
         "main_sheet": "summary",
-        "read_sheet": ["2021.11.18", "2022.01.20"]
+        "read_sheet": ["2021.11.30", "2022.12.14", "2022.02.04", "2022.02.11"]
     },
     
     "Output":
@@ -20,6 +20,8 @@
 
     "Filter_data":
     {
+        "header_length": 64,
+        "classification_col": 3,
         "nofileexist": "-",
         "target_class":"Human",
         "nontarget_class":"Empty",

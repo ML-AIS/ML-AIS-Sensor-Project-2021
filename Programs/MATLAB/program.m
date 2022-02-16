@@ -5,7 +5,6 @@
 % 3. Categorise data into category, which is pre-set by configuration file.
 % 4. Create confusion matrix and calculate evaluation result.
 
-
 %% 1. Read setting file and retrieve setting parameter
 % This step will read setting file and retrieve parameters from it
 setting_filename = 'setting.json';
@@ -26,7 +25,6 @@ end
 % Possible cases
 % 1. Header : true, false
 % 2. Threshold : true, false
-
 
 tbl_manage = readtable(setting.Path.manage_filename, ...
     'FileType', 'spreadsheet', ...
@@ -53,145 +51,61 @@ for idx = 1:size(data_sheet, 1)
     % 2. Belt_status: belt, nobelt
     % 3. Movement_status: movement, nomovement
     
-    case_num = categorise_case(setting.Filter_data);
+    % case_num = filter_file(setting.Filter_data);
     
-    filt_file   = ~contains(tbl_data.Filename, setting.Filter_data.nofileexist);
-    filt_door   = contains(tbl_data.Door_status, setting.Filter_data.door);
-    filt_target = contains(tbl_data.Subject, setting.Filter_data.target_class);
-    filt_belt   = contains(tbl_data.belt_status, setting.Filter_data.belt);
-    filt_mvment = contains(tbl_data.movement_status, setting.Filter_data.movement);
+    [list_filename, list_subject, list_measurement_amt] = filter_file(tbl_data, setting.Filter_data);
     
-    filter = filt_file.*filt_door.*filt_target.*filt_belt.*filt_mvment;
-    filter = logical(filter);
+    list_filname = filter_file(tbl_data, setting.Filter_data);
+    size_filelist = size(list_filname, 1);
+    size_data = sum(list_measurement_amt, 1);
     
-    filename_list = tbl_data.Filename(filter);
+    class_real = strings(size_data, 1);
+    class_pred = strings(size_data, 1);
     
+    counter = 0;
     
-    
-    
-    
-    switch case_num
-        case 1
-            
-            
-            
-        case 2
-            
-        case 3
-            
-        case 4
-            
-        case 5
-            
-        case 6
-            
-        case 7
-            
-        case 8
-            
-        case 9
-            
-        case 10
-            
-        otherwise
-            
+    % Read each file
+    for jdx = 1:size_filelist
+        data_fullpath = fullfile(setting.Path.data_path, data_sheet{idx}, list_filname(jdx));
+        content = readmatrix(data_fullpath);
+        
+        size_content = size(content, 1);
+        %class_real = strings(size_content, 1);
+        %class_pred = strings(size_content, 1);
+        
+        
+        bgn_idx = (jdx-1)*size_content+1;
+        end_idx = ((jdx-1)+1)*size_content;
+        % Define real class array with class value
+        if contains(list_subject(jdx), setting.Filter_data.target_class)
+            class_real(bgn_idx: end_idx) = setting.Filter_data.target_class;
+        elseif contains(list_subject(jdx), setting.Filter_data.nontarget_class)
+            class_real(bgn_idx: end_idx) = setting.Filter_data.nontarget_class;
+        else
+            error("classification setting is wrong.");
+        end
+        
+        % Guard for empty file --> skip file
+        if isempty(content)
+            continue;
+        end
+        
+        % Guard for header in file --> skip file
+        % headers have length in the first column
+        check_headers = all(content(:,1) == setting.Filter_data.header_length);
+        if ~(check_headers == true) % headers exist
+            continue;
+        end
+        
+        % Find class result in file
+        class_pred(bgn_idx:end_idx, 1) = string(content(1:end, setting.Filter_data.classification_col));
+        class_pred(class_pred=="1") = setting.Filter_data.nontarget_class; % !TODO make this more dynamic
+        class_pred(class_pred=="2") = setting.Filter_data.nontarget_class; % !TODO make this more dynamic
+        
     end
     
     
     
-    
-    
-    
-    
-    tbl_data.Filename(  contains(tbl_data.Subject, setting.Filter_data.nontarget_class) );
-    
-    
-    %     % List all data_path per sheet
-    %     data_fullpath = fullfile(setting.Path.data_path, data_sheet{idx});
-    %     list_datafile = dir(data_fullpath);
-    %     list_datafile = list_datafile(3:end);
-    %
-    %     size_datafile = size(list_datafile, 1);
-    %     list_datafullfile = strings(size_datafile, 1);
-    %     for jdx = 1:size_datafile
-    %         list_datafullfile(jdx) = fullfile(list_datafile(jdx).folder, list_datafile(jdx).name);
-    %     end
-    
-    
-    
-    
-    
-    
-    
-    
-    
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-tbl_data = readtable(setting.Path.manage_filename, ...
-    'FileType', 'spreadsheet', ...
-    'Sheet', read_sheet_list, ...
-    'TextType', 'string', ...
-    'ReadVariableNames', true);
-
-unique_x = unique(tbl_data.X);
-unique_y = unique(tbl_data.Y);
-
-% Remove NaN value if exist (!TODO tmp soln)
-unique_x = unique_x(1:end-1);
-unique_y = unique_y(1:end-1);
-
-size_x = size(unique_x, 1);
-size_y = size(unique_y, 1);
-
-thresh = zeros(size_x*size_y, 2);
-% threshold value
-% |  X  |   Y   |
-% | 160 | 11000 |
-% | 160 | 12000 |
-% | 160 | 13000 |
-% | ... | ...   |
-% | N   | M     |
-
-% Create threshold combination for x and y
-counter = 1;
-for i = 1:size_x
-    for j = 1:size_y
-        thresh(counter,1) = unique_x(i);
-        thresh(counter,2) = unique_y(j);
-        counter = counter + 1;
-    end
-end
-
-% Create confusion matrix for each threshold combination\
-% 1. Set condition for selection (all, header requirement, door_status, belt_status,
-% movement_status, );
-% 2.
-combination_amount = size(thresh, 1);
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
