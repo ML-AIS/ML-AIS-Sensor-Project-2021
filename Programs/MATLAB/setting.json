@@ -1,0 +1,35 @@
+{
+    "Path":
+    {
+        "data_path": "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/",
+        "manage_filename": "Data_detail.xlsx"
+    },
+
+    "Sheet_mgn":
+    {
+        "main_sheet": "summary",
+        "read_sheet": ["2021.11.18", "2022.01.20"]
+    },
+    
+    "Output":
+    {
+        "conMat_path": "confusion_matrix_2022.02.11",
+        "conMat_filetype": ".png",
+        "evaluation_filename": "Evaluation_result.xlsx"
+    },
+
+    "Filter_data":
+    {
+        "nofileexist": "-",
+        "target_class":"Human",
+        "nontarget_class":"Empty",
+        "data_filetype": ".txt",
+        "header": "true",
+        "threshold": "true",
+        "door": "closed",
+        "belt": "belt",
+        "movement": "movement"
+    }
+
+}
+
