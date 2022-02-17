@@ -1,13 +1,22 @@
-function [list_filename, list_subject, list_measurement_amt] = filter_file(tbl_data, filter_data)
+function list_filter = filter_file(tbl_data, filter_data)
 
-filt_file   = ~contains(tbl_data.Filename, filter_data.nofileexist);
+% initialise output
+list_filter = cell(1, 3);
+
+filt_file   = ~contains(tbl_data.Filename, filter_data.notexist);
 %% Filter target class ( normally means human )
 filt_door   = contains(tbl_data.Door_status, filter_data.door);
 filt_target = contains(tbl_data.Subject, filter_data.target_class);
 filt_belt   = contains(tbl_data.belt_status, filter_data.belt);
 filt_mvment = contains(tbl_data.movement_status, filter_data.movement);
 
-filter_target = filt_file.*filt_door.*filt_target.*filt_belt.*filt_mvment;
+% AND conditions
+filter_target = filt_file.* ...
+    filt_door.* ...
+    filt_target.* ...
+    filt_belt.* ...
+    filt_mvment;
+
 filter_target = logical(filter_target);
 listfilename_target = tbl_data.Filename(filter_target);
 listsubject_target = tbl_data.Subject(filter_target);
@@ -17,7 +26,10 @@ list_measurement_amt_target = tbl_data.Measurement_amount(filter_target);
 filn_door   = contains(tbl_data.Door_status, filter_data.door);
 filn_target = contains(tbl_data.Subject, filter_data.nontarget_class);
 
-filter_nontarget = filt_file.*filn_door.*filn_target;
+filter_nontarget = filt_file.* ...
+    filn_door.* ...
+    filn_target;
+
 filter_nontarget = logical(filter_nontarget);
 listfilename_nontarget = tbl_data.Filename(filter_nontarget);
 listsubject_nontarget = tbl_data.Subject(filter_nontarget);
@@ -35,5 +47,10 @@ list_subject(size(listsubject_nontarget, 1)+1:end, 1) = listsubject_target;
 list_measurement_amt = zeros(size(list_measurement_amt_target, 1)+size(list_measurement_amt_nontarget, 1), 1);
 list_measurement_amt(1:size(list_measurement_amt_nontarget, 1)) = list_measurement_amt_nontarget;
 list_measurement_amt(size(list_measurement_amt_nontarget, 1)+1:end, 1) = list_measurement_amt_target;
+
+% Output as cell
+list_filter{1, 1} = list_filename;
+list_filter{1, 2} = list_subject;
+list_filter{1, 3} = list_measurement_amt;
 
 end

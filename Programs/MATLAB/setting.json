@@ -8,29 +8,35 @@
     "Sheet_mgn":
     {
         "main_sheet": "summary",
-        "read_sheet": ["2021.11.30", "2022.12.14", "2022.02.04", "2022.02.11"]
+        "read_sheet": ["2021.11.30", "2021.12.14", "2022.01.20", "2022.02.04", "2022.02.11"],
+        "sheet_headers": ["true","true","true", "true", "true"],
+        "sheet_threshold": ["false", "false", "true", "true", "true"]
     },
     
     "Output":
     {
-        "conMat_path": "confusion_matrix_2022.02.11",
+        "conMat_path": "confusion_matrix",
         "conMat_filetype": ".png",
-        "evaluation_filename": "Evaluation_result.xlsx"
+        "evaluation_filename": "Evaluation_result.xlsx",
+        "table_entity": ["X", "Y", "Amount_data", "Accuracy", "Precision", "Recall", "F1_Score", "TP", "FP", "FN", "TN"],
+        "table_entity_type": ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double"]
     },
 
     "Filter_data":
     {
         "header_length": 64,
         "classification_col": 3,
-        "nofileexist": "-",
+        "notexist": "-",
         "target_class":"Human",
+        "target_index":"2",
         "nontarget_class":"Empty",
+        "nontarget_index":"1",
         "data_filetype": ".txt",
         "header": "true",
-        "threshold": "true",
-        "door": "closed",
-        "belt": "belt",
-        "movement": "movement"
+        "threshold_amt": 11,
+        "door": "",
+        "belt": "",
+        "movement": ""
     }
 
 }
