@@ -8,6 +8,9 @@
 
 %% 1. Read setting file and retrieve setting parameter
 % This step will read setting file and retrieve parameters from it
+
+disp("Program begin ...");
+
 setting_filename = 'setting.json';
 fid = fopen(setting_filename);
 raw = fread(fid, inf);
@@ -15,8 +18,10 @@ str = char(raw');
 fclose(fid);
 
 setting = jsondecode(str);
+disp(["Finished reading setting file from ", setting_filename]);
 
-exist_sheet_list = sheetnames(setting.Path.manage_filename);
+mgnment_file = fullfile( setting.Path.data_path ,setting.Path.manage_filename);
+exist_sheet_list = sheetnames(mgnment_file);
 
 if ~any(strcmp(setting.Sheet_mgn.main_sheet, exist_sheet_list))
     return;
@@ -27,13 +32,13 @@ end
 % 1. Header : true, false
 % 2. Threshold : true, false
 
-mgnment_file = fullfile( setting.Path.data_path   ,setting.Path.manage_filename);
-
 tbl_manage = readtable(mgnment_file, ...
     'FileType', 'spreadsheet', ...
     'Sheet', setting.Sheet_mgn.main_sheet, ...
     'TextType', 'string', ...
     'ReadVariableNames', true);
+
+disp(["Finish reading management table from", setting.Path.manage_filename]);
 
 %% 2. Look for data directories and read files in each folder.
 read_data_sheet = setting.Sheet_mgn.read_sheet; % !TODO verify sheet before use.
@@ -52,8 +57,10 @@ end
 % Process each loop per data sheet
 for idx = 1:size(read_data_sheet, 1)
     
+    disp(["Begin reading data for sheet:",  read_data_sheet{idx}]);
+    
     % Read data table from sheet
-    tbl_data = readtable(setting.Path.manage_filename, ...
+    tbl_data = readtable(mgnment_file, ...
         'FileType', 'spreadsheet', ...
         'Sheet', read_data_sheet{idx}, ...
         'TextType', 'string', ...
@@ -61,6 +68,7 @@ for idx = 1:size(read_data_sheet, 1)
     
     
     %% 3. Categorises data
+    disp("Begin filter data ...");
     if (strcmp (setting.Sheet_mgn.sheet_threshold{idx}, 'true') ) % Threshold exist
 
         % Filter data according to condition
@@ -70,17 +78,17 @@ for idx = 1:size(read_data_sheet, 1)
     else % Threshold does not exist
         
         % Filter data according to condition
-        [list_filename, ...
-            list_subject, ...
-            list_measurement_amt] = filter_file(tbl_data, setting.Filter_data);
+        list_filter = filter_file(tbl_data, setting.Filter_data);
 
     end
     
     %% 4. Classify data value and return classification result.
+    disp("Begin classify data ...");
     [class_real, class_pred] = classify_data_thresh( ...
         read_data_sheet{idx}, ...
         list_filter, ...
-        setting);
+        setting, ...
+        idx);
     
     
     %% 5. Create confusion matrix and evaluate data.
@@ -89,6 +97,7 @@ for idx = 1:size(read_data_sheet, 1)
     % 2. create confusion matrices and store in specified path
     % 3. write evaluation result to file.
     
+    disp("Begin evaluate data ...");
     % 0. Create evaluation table
     col = size(setting.Output.table_entity, 1);
     row = size(class_real, 1);
@@ -106,7 +115,7 @@ for idx = 1:size(read_data_sheet, 1)
         class_pred_res = categorical(class_pred{kdx, 1});
       
         % create dir if not exist
-        sheet_folder = fullfile(confusion_matrix, read_data_sheet{idx});
+        sheet_folder = fullfile('confusion_matrix', read_data_sheet{idx});
         if ~exist(sheet_folder, 'dir')
             mkdir(sheet_folder);
         end
@@ -120,11 +129,12 @@ for idx = 1:size(read_data_sheet, 1)
         % 2.) Threshold not exist
         if (size(class_real, 2) == 2) % Threshold exist
             X = class_real{kdx ,2}(1, 1); Y = class_real{kdx ,2}(1, 2);
-            threshold_combi = strcat( X, '-', Y );
-            save_cm_path = fullfile( setting.Output.conMat_path, threshold_combi, conf.output.conMat_filetype ) ;
+            save_filename = strcat( X, '-', Y , setting.Output.conMat_filetype);
+            save_cm_path = fullfile( setting.Output.conMat_path, read_data_sheet{idx}, save_filename ) ;
             saveas(gcf, save_cm_path);
         else % Threshold not exist
-            save_cm_path = fullfile( setting.Output.conMat_path, read_data_sheet{idx}, conf.output.conMat_filetype ) ;
+            save_filename = strcat(read_data_sheet{idx}, setting.Output.conMat_filetype);
+            save_cm_path = fullfile( setting.Output.conMat_path, read_data_sheet{idx}, save_filename ) ;
             saveas(gcf, save_cm_path);
         end
         close(gcf);
@@ -172,7 +182,7 @@ for idx = 1:size(read_data_sheet, 1)
     disp(["Finished process on ",  read_data_sheet{idx}]);
     
     % Write Evaluation table
-    eval_filename = fullfile('Evaluation Result', read_data_sheet{idx});
+    eval_filename = strcat('Evaluation Result', read_data_sheet{idx}, '.xlsx');
     writetable(tbl_eval, eval_filename);
     disp(["Finised writing result file: ", eval_filename]);
     

@@ -1,4 +1,4 @@
-function [class_real, class_pred] = classify_data_thresh(data_sheet, list_filter, setting)
+function [class_real, class_pred] = classify_data_thresh(data_sheet, list_filter, setting, index)
 
 size_list_filter = size(list_filter, 1);
 
@@ -9,8 +9,14 @@ filter_data = setting.Filter_data;
 % | 1st-col             | 2nd-col   |
 % | {classified result} | threshold |
 % | {classified result} | threshold |
-class_real = cell(size_list_filter, 2);
-class_pred = cell(size_list_filter, 2);
+
+if( strcmp(setting.Sheet_mgn.sheet_threshold(index), 'true') ) % Threshold exist
+    class_real = cell(size_list_filter, 2);
+    class_pred = cell(size_list_filter, 2);
+else % Threshold not exist
+    class_real = cell(size_list_filter, 1);
+    class_pred = cell(size_list_filter, 1);
+end
 
 % Read each file
 % 2 cases
