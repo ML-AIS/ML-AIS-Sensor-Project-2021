@@ -1,0 +1,25 @@
+{
+    "input":
+{
+        "data_path": "C:/workspace/FRA-UAS/semester3/ML-AIS/ML-AIS-Sensor-Project-2021/Data/2022.02.11-tmp/",
+        "search_keyword": "**/FFT_*.txt"
+    },
+    
+    "output":
+    {
+        "conMat_path": "confusion_matrix_2022.02.11",
+        "conMat_filetype": ".png",
+        "evaluation_filename": "Evaluation Result 2022.02.11.xlsx"
+    },
+
+    "setting":
+    {
+        "table_entity": ["ThresholdSetting", "Amount of Data", "Accuracy", "Precision", "Recall", "F1-Score"],
+        "table_entity_type": ["string", "double", "double", "double", "double", "double"],
+        "target_group": "Empty Seat",
+        "target_group_keyword": "FFT_E",
+        "nontarget_group": "Human",
+        "nontarget_group_keyword": "FFT_H"
+    }
+}
+

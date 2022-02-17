@@ -7,7 +7,6 @@
 % Cases
 % 1. Files with headers
 % 2. Files without headers
-tic
 TP = 0; FP = 0; TN = 0; FN = 0;
 
 num_fileswithheaders = 0;
@@ -21,68 +20,41 @@ num_fileswithoutheaders = 0;
 %       TP : Empty --> Empty
 %       FP : Not Empty --> Empty : Underestimation
 %       FN : Empty --> Not Empty : Overestimation
-%       TN : Not Empty --> Not Empty
+%       TN : Not Empty --> Not Empty 
+
+%% Read setting from json config file
+configFilename = 'config.json';
+fid = fopen(configFilename);
+raw = fread(fid, inf);
+str = char(raw');
+fclose(fid);
+
+conf = jsondecode(str);
 
 %% list path and prepare array for storing evaluation result
 
-% Data from 2022.01.20
-data_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\Sensor-1_multiple_threshold\";
-
-% Data from 2022.02.04
-% data_path = "C:\workspace\FRA-UAS\semester3\ML-AIS\ML-AIS-Sensor-Project-2021\Data\2022.02.04\threshold_setting\";
-
-cm_folder = "confusion_matrix 2022.01.20\";
-cm_filetype = '.png';
-
-eval_filename = "Evaluation Result 2022.01.20.xlsx";
-
-list_folder = dir(data_path);
+list_folder = dir(conf.input.data_path);
 % Remove current and prev dir
 list_folder = list_folder(3:end, :);
 
-tbl_var = { ...
-    'ThresholdSetting', ...
-    'Amount of Data', ...
-    'Accuracy', ...
-    'Precision', ...
-    'Recall', ...
-    'F1-Score'
-    };
-
-tbl_var_type  = { ...
-    'string', ...
-    'double', ...
-    'double', ...
-    'double', ...
-    'double', ...
-    'double'
-    };
-
-col = size(tbl_var, 2);
+col = size(conf.setting.table_entity, 1);
 row = size(list_folder, 1);
 tbl_size = [row col];
-
-% row_names = strings(row, 1);
-% row_names(1:end) = list_folder(1:end).name;
 
 % Create table for evaluation result
 
 eval_tbl = table( ...
     'Size', tbl_size, ...
-    'VariableNames', tbl_var, ...
-    'VariableTypes', tbl_var_type ...
+    'VariableNames', conf.setting.table_entity, ...
+    'VariableTypes', conf.setting.table_entity_type ...
     );
 
-
-% Keyword for search
-keyword = "**/FFT_*.txt"; % change this keyword to filter files according to case.
-
-disp("Program create confusion matrix beinn! ...");
+disp("Program create confusion matrix beginn! ...");
 
 for k = 1:tbl_size(1)
     
     path_fullfolder = fullfile(list_folder(k).folder, list_folder(k).name);
-    path_withkey = fullfile(path_fullfolder,keyword);
+    path_withkey = fullfile(path_fullfolder, conf.input.search_keyword);
     % 1. List file paths with keyword
     listdir = dir(path_withkey);
     
@@ -122,29 +94,29 @@ for k = 1:tbl_size(1)
                 
                 
                 % check keyword
-                % 1. Empty "Empty Seat"
-                if contains(fullfilepath, "FFT_E")
+                % 1. Empty target_group
+                if contains(fullfilepath, conf.setting.target_group_keyword)
                     
-                    result_actual(counter) = "Empty Seat";
+                    result_actual(counter) = conf.setting.target_group;
                     
                     % Classification
                     % 1 : Empty
                     % 2 : Human
                     switch classification
                         case 1
-                            result_classified(counter) = "Empty Seat";
+                            result_classified(counter) = conf.setting.target_group;
                         case 2
                             % Empty -> Not Empty
-                            result_classified(counter) = "Human";
+                            result_classified(counter) = conf.setting.nontarget_group;
                         otherwise
-                            disp("Problem with Switch Case E condition");
+                            disp(["Problem with Switch Case with ", conf.setting.target_group]);
                     end
                     
                     counter = counter + 1;
                     
-                elseif contains(fullfilepath, "FFT_H")
+                elseif contains(fullfilepath, conf.setting.nontarget_group_keyword)
                     
-                    result_actual(counter) = "Human";
+                    result_actual(counter) = conf.setting.nontarget_group;
                     
                     % Classification
                     % 1 : Empty
@@ -152,17 +124,17 @@ for k = 1:tbl_size(1)
                     switch classification
                         case 1
                             % Not Empty -> Empty FP
-                            result_classified(counter) = "Empty Seat";
+                            result_classified(counter) = conf.setting.nontarget_group;
                         case 2
-                            result_classified(counter) = "Human";
+                            result_classified(counter) = conf.setting.target_group;
                         otherwise
-                            disp("Problem with Switch Case H condition");
+                            disp("Problem with Switch Case ", conf.setting.nontarget_group);
                     end
                     
                     counter = counter + 1;
                     
                 else
-                    disp("This is a problem !!!");
+                    disp("This is a problem out of the ordinary");
                 end
                 
             end
@@ -193,11 +165,11 @@ for k = 1:tbl_size(1)
     TP = cm(1); FN = cm(3);
     FP = cm(2); TN = cm(4);
     
-    if ~exist(cm_folder, 'dir')
-        mkdir(cm_folder)
+    if ~exist(conf.output.conMat_path, 'dir')
+        mkdir(conf.output.conMat_path)
     end    
     
-    save_cm_path = fullfile( cm_folder, strcat(list_folder(k).name, cm_filetype) );
+    save_cm_path = fullfile( conf.output.conMat_path, strcat(list_folder(k).name, conf.output.conMat_filetype) );
     saveas(gcf, save_cm_path);
     
     accuracy = sum(result_classified == result_actual)/numel(result_actual);
@@ -207,7 +179,7 @@ for k = 1:tbl_size(1)
     
     % Evaluation
     eval_tbl.ThresholdSetting(k) = list_folder(k).name;
-    eval_tbl.("Amount of Data")(k) = counter;
+    eval_tbl.("Amount of Data")(k) = counter-1;
     eval_tbl.Accuracy(k) = accuracy;
     eval_tbl.Precision(k) = precision;
     eval_tbl.Recall(k) = recall;
@@ -218,10 +190,10 @@ for k = 1:tbl_size(1)
     
 end
 
-writetable(eval_tbl, eval_filename);
-disp(["Finised writing result file: ", eval_filename]);
+writetable(eval_tbl, conf.output.evaluation_filename);
+disp(["Finised writing result file: ", conf.output.evaluation_filename]);
 
 disp("End of Program!");
-toc
+
 
 
