@@ -74,7 +74,6 @@ for idx = 1:size(read_data_sheet, 1)
         % Filter data according to condition
         list_filter = filter_file_thresh(tbl_data, setting.Filter_data);
         
-
     else % Threshold does not exist
         
         % Filter data according to condition
@@ -115,7 +114,7 @@ for idx = 1:size(read_data_sheet, 1)
         class_pred_res = categorical(class_pred{kdx, 1});
       
         % create dir if not exist
-        sheet_folder = fullfile('confusion_matrix', read_data_sheet{idx});
+        sheet_folder = fullfile(setting.Output.conMat_path, read_data_sheet{idx});
         if ~exist(sheet_folder, 'dir')
             mkdir(sheet_folder);
         end
@@ -129,7 +128,7 @@ for idx = 1:size(read_data_sheet, 1)
         % 2.) Threshold not exist
         if (size(class_real, 2) == 2) % Threshold exist
             X = class_real{kdx ,2}(1, 1); Y = class_real{kdx ,2}(1, 2);
-            save_filename = strcat( X, '-', Y , setting.Output.conMat_filetype);
+            save_filename = strcat( num2str(X), '-', num2str(Y) , setting.Output.conMat_filetype);
             save_cm_path = fullfile( setting.Output.conMat_path, read_data_sheet{idx}, save_filename ) ;
             saveas(gcf, save_cm_path);
         else % Threshold not exist
@@ -162,10 +161,13 @@ for idx = 1:size(read_data_sheet, 1)
         % 1. Threshold exist
         % 2. Threshold not exist
         if (size(class_real, 2) == 2) % Threshold exist
-            tbl_eval.X = X; tbl_eval.Y = Y; 
+            tbl_eval.X(kdx) = X; tbl_eval.Y(kdx) = Y; 
         else
-            tbl_eval.X = '-'; tbl_eval.Y = '-'; 
+            tbl_eval.X(kdx) = '-'; tbl_eval.Y(kdx) = '-'; 
         end
+        
+        % Amount of data
+        tbl_eval.Amount_data(kdx) = size(class_real_res, 1);
         
         % Evaluation result
         tbl_eval.Accuracy(kdx) = accuracy;
@@ -182,7 +184,7 @@ for idx = 1:size(read_data_sheet, 1)
     disp(["Finished process on ",  read_data_sheet{idx}]);
     
     % Write Evaluation table
-    eval_filename = strcat('Evaluation Result', read_data_sheet{idx}, '.xlsx');
+    eval_filename = strcat(setting.Output.evaluation_filename, read_data_sheet{idx}, '.xlsx');
     writetable(tbl_eval, eval_filename);
     disp(["Finised writing result file: ", eval_filename]);
     
