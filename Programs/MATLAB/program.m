@@ -110,6 +110,12 @@ for idx = 1:size(read_data_sheet, 1)
     
     % 1. Read classification result 
     for kdx = 1:size(class_real, 1)
+        
+        % Case empty cannot classify and evaluate
+        if strcmp(class_real{kdx, 1}, setting.Filter_data.notexist)
+            continue;
+        end
+        
         class_real_res = categorical(class_real{kdx, 1});
         class_pred_res = categorical(class_pred{kdx, 1});
       

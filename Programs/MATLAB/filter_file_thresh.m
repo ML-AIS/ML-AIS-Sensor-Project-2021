@@ -131,6 +131,16 @@ for i = 1:size(list_threshold, 1)
     
     %% Finalise list before return output
     size_eachlist = size(filter_target(filter_target==1), 1) + size(filter_nontarget(filter_nontarget==1), 1);
+   
+    
+    % Case : Empty list, cannot find matched cases
+    if isempty(list_threshold_target)
+        list_filter{i, 1} = filter_data.notexist;
+        list_filter{i, 2} = filter_data.notexist;
+        list_filter{i, 3} = filter_data.notexist;
+        list_filter{i, 4} = filter_data.notexist;
+        continue;
+    end
     
     % list threshold
     list_threshold_exp = zeros(size_eachlist, 1);

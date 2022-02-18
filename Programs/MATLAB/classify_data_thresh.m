@@ -43,6 +43,17 @@ for idx = 1:size_list_filter
     class_real_each = strings(size_data, 1);
     class_pred_each = strings(size_data, 1);
     
+    % Case : Empty list, cannot find matched cases
+    if strcmp(list_filter{idx}, setting.Filter_data.notexist)
+        class_real{idx, 1} = setting.Filter_data.notexist;
+        class_pred{idx, 1} = setting.Filter_data.notexist;
+        
+        class_real{idx, 2} = setting.Filter_data.notexist;
+        class_pred{idx, 2} = setting.Filter_data.notexist;
+        continue;
+    end
+    
+    
     
     for jdx = 1:size_list_filename
         

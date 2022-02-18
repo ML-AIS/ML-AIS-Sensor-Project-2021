@@ -9,15 +9,15 @@
     {
         "main_sheet": "summary",
         "read_sheet": ["2021.11.30", "2021.12.14", "2022.01.20", "2022.02.04", "2022.02.11"],
-        "sheet_headers": ["true","true","true", "true", "true"],
-        "sheet_threshold": ["false", "false", "true", "true", "true"]
+        "sheet_headers": ["true","true", "true","true", "true"],
+        "sheet_threshold": ["false", "false", "true","true", "true"]
     },
     
     "Output":
     {
-        "conMat_path": "confusion_matrix_nomovement",
+        "conMat_path": "confusion_matrix_movement",
         "conMat_filetype": ".png",
-        "evaluation_filename": "Evaluation_result_nomovement",
+        "evaluation_filename": "Evaluation_result_movement",
         "table_entity": ["X", "Y", "Amount_data", "Accuracy", "Precision", "Recall", "F1_Score", "TP", "FP", "FN", "TN"],
         "table_entity_type": ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double"]
     },
@@ -36,7 +36,7 @@
         "threshold_amt": 11,
         "door": "",
         "belt": "",
-        "movement": "nomovement"
+        "movement": "withmovement"
     }
 
 }
