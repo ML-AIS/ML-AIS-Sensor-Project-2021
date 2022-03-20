@@ -71,8 +71,13 @@ for idx = 1:size(read_data_sheet, 1)
     disp("Begin filter data ...");
     if (strcmp (setting.Sheet_mgn.sheet_threshold{idx}, 'true') ) % Threshold exist
 
-        % Filter data according to condition
-        list_filter = filter_file_thresh(tbl_data, setting.Filter_data);
+        if (strcmp (setting.Sheet_mgn.sheet_distance{idx}, 'true') ) % Distance exist
+            % With Distance.
+            list_filter = filter_file_thresh_distance(tbl_data, setting.Filter_data);
+        else
+            % Filter data according to condition
+            list_filter = filter_file_thresh(tbl_data, setting.Filter_data);
+        end
         
     else % Threshold does not exist
         
