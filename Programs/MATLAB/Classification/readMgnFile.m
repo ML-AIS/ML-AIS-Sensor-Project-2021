@@ -1,4 +1,4 @@
-function read_datasheet = readMgnFile(setting)
+function table_manage = readMgnFile(setting)
 % Read sheet according to setting and return expected to read data sheet list 
 
 mgnment_file = fullfile( setting.Path.data_path ,setting.Path.manage_filename );
@@ -16,7 +16,7 @@ end
 % 1. Header : true, false
 % 2. Threshold : true, false
 
-tbl_manage = readtable(mgnment_file, ...
+table_manage = readtable(mgnment_file, ...
     'FileType', 'spreadsheet', ...
     'Sheet', setting.Sheet_mgn.main_sheet, ...
     'TextType', 'string', ...
@@ -26,7 +26,7 @@ tbl_manage = readtable(mgnment_file, ...
 read_datasheet = setting.Sheet_mgn.read_sheet; % !TODO verify sheet before use.
 
 % Verify if read sheets exist in management table or not
-exist_data_sheet = tbl_manage.Measurement_date;
+exist_data_sheet = table_manage.Measurement_date;
 exist_data_sheet = exist_data_sheet(exist_data_sheet ~= setting.Filter_data.notexist); % clear empty value
 
 verify_exist = contains(read_datasheet, exist_data_sheet);

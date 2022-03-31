@@ -9,9 +9,9 @@
     {
         "main_sheet": "summary",
         "read_sheet": ["2022.03.11"],
-        "sheet_headers": ["true"],
-        "sheet_threshold": ["true"],
-        "sheet_distance":["true"]
+        "sheet_headers": ["1"],
+        "sheet_threshold": ["1"],
+        "sheet_distance":["1"]
     },
     
     "Output":

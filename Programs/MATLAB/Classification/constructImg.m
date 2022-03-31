@@ -1,4 +1,4 @@
-function img_cell = constructImg(data, num_row)
+function img_cell = constructImg(data, num_row, input_min, input_max)
 % Construct images for data each row then return image cell.
 
 % Giving path of dataset folder
@@ -12,7 +12,7 @@ data_row = size(data, 1);
 % !TODO delete  num_row = 5;
 
 % normalize data and multiply by 255 to get greyscale image
-norm_data = rescale(data);
+norm_data = rescale(data, 'InputMin', input_min,'InputMax', input_max);
 img_data  = 255.*norm_data;
 
 img_cell = cell(size(data, 1), 1);
