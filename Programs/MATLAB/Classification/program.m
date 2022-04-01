@@ -25,10 +25,9 @@ fid = fopen(setting_filename);
 raw = fread(fid, inf);
 str = char(raw');
 fclose(fid);
-
+img_ext = ".png"; % !TODO move this setting to json
 setting = jsondecode(str);
 disp(["Finished reading setting file from ", setting_filename]);
-
 
 table_manage = readMgnFile(setting);
 read_datasheet = setting.Sheet_mgn.read_sheet;
@@ -37,16 +36,13 @@ mgnment_file = fullfile( setting.Path.data_path ,setting.Path.manage_filename);
 
 disp(["Finished reading management table from", setting.Path.manage_filename]);
 
-
-
 if (mode == 0)
     %% 2. Filter expect files from criteria
     disp("Begin filtering expected files due to criteria");
-
-
+    
     cell_tbl_data = cell(num_datasheet, 1);
     cell_datapath = cell(num_datasheet, 1);
-
+    
     for idx = 1:num_datasheet
 
         tbl_data = readtable(mgnment_file, ...
@@ -120,22 +116,19 @@ if (mode == 0)
     end
 
     disp("Write Images into each subfolder ...");
-
+    
     % Write Image into each subfolder
     for idx = 1:size(sub_folder, 1)
 
         total_img = size(cell_img, 1);
         for ldx = 1:total_img
-            img_filename = strcat("img_", num2str(ldx), ".bmp");
+            img_filename = strcat("img_", num2str(ldx), img_ext);
             writepath = fullfile(sub_folder(idx, 1), img_filename);
             imwrite(cell_img{ldx, 1}, writepath);
         end
     end
 
     disp("Writing Image finished!");
-
-
-
 
 elseif (mode == 1)
     %% 4. Feed FFT-Images into convNet and train network
@@ -144,15 +137,13 @@ elseif (mode == 1)
     for idx = 1:size(read_datasheet, 1)
 
         folder_name = read_datasheet{idx, 1};
-        filetype = ".bmp";
 
         imds = imageDatastore(folder_name, ...
             'LabelSource', 'foldernames', ...
             'IncludeSubfolders', true, ...
-            'FileExtensions', filetype);
+            'FileExtensions', img_ext);
 
-        % TODO!
-        % 1. Read data from each sheet
+        % Read data from each sheet
         tbl_data = readtable(mgnment_file, ...
             'FileType', 'spreadsheet', ...
             'Sheet', read_datasheet{idx}, ...
@@ -172,11 +163,14 @@ elseif (mode == 1)
         
         % Mapping label according to class and filenames
         total_img = size(imds.Files, 1);
+        list_labels = strings(total_img, 1);
         for jdx = 1:total_img
             find_result = strcmp(string(imds.Labels(jdx)), tbl_mapping(:, 2));
             k = find(find_result);
-            imds.Labels(jdx) = tbl_mapping(k, 1);
+            list_labels(jdx, 1) = tbl_mapping(k, 1);
         end
+
+        imds.Labels = categorical(erase(string(imds.Labels), "*") + list_labels);
 
     end
     
@@ -184,9 +178,7 @@ elseif (mode == 1)
     img = imread(string(imds.Files(1)));
     input_size = size(img);
 
-    % TODO modify Model to support data
-    % TODO why training shows 86 classes.
-    
+    % TODO modify Model to support data and imrove result
     CNNlayers = createCNNlayers(input_size);
 
     % Train Network 
@@ -195,18 +187,18 @@ elseif (mode == 1)
     [imdsTrain, imdsTest] = splitEachLabel(imds, train_test_ratio, 'randomize');
     
     options = trainingOptions('sgdm', ...
-            'InitialLearnRate',0.01, ...
-            'MaxEpochs',30, ...
-            'MiniBatchSize',16, ...
+            'InitialLearnRate',0.1, ...
+            'MaxEpochs',5, ...
+            'MiniBatchSize',100, ...
             'Shuffle','every-epoch', ...
             'ValidationData',imdsTest, ...
-            'ValidationFrequency',30, ...
+            'ValidationFrequency',100, ...
             'Verbose',false, ...
+            'ExecutionEnvironment','multi-gpu', ...
             'Plots','training-progress');
 
     disp("Train model ....");
     model = trainNetwork(imdsTrain,CNNlayers,options);
-
 
     %% 5. Classify FFT-Images
     disp("Classify network with Test Data ...");

@@ -41,7 +41,7 @@ CNNlayers = [
 
     %A fully connected layer multiplies the input by
     %a weight matrix and then adds a bias vector.
-%     fullyConnectedLayer(86)
+    fullyConnectedLayer(2)
     softmaxLayer
     classificationLayer];
 
