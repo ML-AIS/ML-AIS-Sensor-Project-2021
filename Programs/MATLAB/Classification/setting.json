@@ -40,6 +40,14 @@
         "movement": "",
         "Distance": "",
         "Dress_variation": ""
+    },
+
+    "Img_data":
+    {
+        "img_extention": ".png",
+        "img_height": 5,
+        "input_min": 0,
+        "input_max": 1000
     }
 
 }

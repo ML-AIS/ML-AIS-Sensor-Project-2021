@@ -1,15 +1,7 @@
 function img_cell = constructImg(data, num_row, input_min, input_max)
 % Construct images for data each row then return image cell.
 
-% Giving path of dataset folder
-% !TODO delete csv_filename = "C:\Users\Kaotoo\Desktop\ML-AIS tools\GUI_SW\save\fft_10cm_.csv";
-
-% config on whole data
-% data = readmatrix(csv_filename);
 data_row = size(data, 1);
-
-% config on image size
-% !TODO delete  num_row = 5;
 
 % normalize data and multiply by 255 to get greyscale image
 norm_data = rescale(data, 'InputMin', input_min,'InputMax', input_max);

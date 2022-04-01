@@ -1,4 +1,4 @@
-function table_manage = readMgnFile(setting)
+function table_manage = readManagementFile(setting)
 % Read sheet according to setting and return expected to read data sheet list 
 
 mgnment_file = fullfile( setting.Path.data_path ,setting.Path.manage_filename );
