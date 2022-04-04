@@ -3,18 +3,17 @@
 % 1. Read the management file
 % 2. Filter expect files from criteria
 % 3. Construct FFT-Images from FFT-data
-% 4. Feed FFT-Images into convNet and train
-% 5. Label and Classify FFT-Images
-% 6. Evaluation result
+% 4. Label and Feed FFT-Images into convNet and train
+% 5. Classify FFT-Images
+% 6. Evaluate result
 % -------------------------------------------------------------------------
-
 
 %% 1. Read the Management File from directory
 
-mode = 0; % program mode 0: construct images 1: training and classify
+mode = 1; % program mode 0: construct images 1: training and classify
 
 % Read setting file
-if (mode == 0)
+if (mode == 1)
     disp("Program begin with mode constructing images");
 else
     disp("Program begin with mode training and classification");
@@ -64,12 +63,12 @@ elseif (mode == 1)
     options = trainingOptions('sgdm', ...
             'InitialLearnRate',0.1, ...
             'MaxEpochs',5, ...
-            'MiniBatchSize',100, ...
+            'MiniBatchSize',16, ...
             'Shuffle','every-epoch', ...
             'ValidationData',imdsTest, ...
-            'ValidationFrequency',100, ...
+            'ValidationFrequency',30, ...
             'Verbose',false, ...
-            'ExecutionEnvironment','multi-gpu', ...
+            'ExecutionEnvironment','cpu', ...
             'Plots','training-progress');
 
     disp("Train model ....");

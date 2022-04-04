@@ -6,6 +6,7 @@ data_row = size(data, 1);
 % normalize data and multiply by 255 to get greyscale image
 norm_data = rescale(data, 'InputMin', input_min,'InputMax', input_max);
 img_data  = 255.*norm_data;
+%img_data = heatmap(norm_data);
 
 img_cell = cell(size(data, 1), 1);
 
@@ -24,7 +25,7 @@ for idx = 1:data_row
         img(jdx, 1:frac) = img_data(idx, beg_idx:end_idx);
         
     end
-
+    
     img_cell{idx, 1} = img;
 end
 
