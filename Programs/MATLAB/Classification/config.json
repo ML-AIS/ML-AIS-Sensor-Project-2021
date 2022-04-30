@@ -1,0 +1,13 @@
+{
+    "data_path":"../../../Data/",
+    "target_class":"Human",
+    "nontarget_class":"Empty",
+    "management_filename":"Data_detail.xlsx",
+    "data_size": 85,
+    "header_size": 16,
+    "fft":
+    {
+        "upper_limit":1000,
+        "lower_limit":0
+    }
+}

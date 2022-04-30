@@ -1,0 +1,54 @@
+{
+    "Path":
+    {
+        "data_path": "../../../Data/",
+        "manage_filename": "Data_detail.xlsx"
+    },
+
+    "Sheet_mgn":
+    {
+        "main_sheet": "summary",
+        "read_sheet": ["2022.03.11"],
+        "sheet_headers": ["1"],
+        "sheet_threshold": ["1"],
+        "sheet_distance":["1"]
+    },
+    
+    "Output":
+    {
+        "conMat_path": "conMat",
+        "conMat_filetype": ".png",
+        "evaluation_filename": "Evaluation_result_nobelt_back_noscarf",
+        "table_entity": ["X", "Y", "Amount_data", "Accuracy", "Precision", "Recall", "F1_Score", "TP", "FP", "FN", "TN"],
+        "table_entity_type": ["double", "double", "double", "double", "double", "double", "double", "double", "double", "double", "double"]
+    },
+
+    "Filter_data":
+    {
+        "header_length": 64,
+        "classification_col": 3,
+        "notexist": "-",
+        "target_class":"Human",
+        "target_index":"2",
+        "nontarget_class":"Empty",
+        "nontarget_index":"1",
+        "data_filetype": ".txt",
+        "header": "true",
+        "threshold_amt": 11,
+        "door": "",
+        "belt": "",
+        "movement": "",
+        "Distance": "",
+        "Dress_variation": ""
+    },
+
+    "Img_data":
+    {
+        "img_extention": ".png",
+        "img_height": 5,
+        "input_min": 0,
+        "input_max": 1000
+    }
+
+}
+
