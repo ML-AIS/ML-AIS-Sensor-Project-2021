@@ -1,85 +1,98 @@
-% Program to classify data on ML-AIS project.
+% Program to list filenames on ML-AIS project.
 % -------------------------------------------------------------------------
 % 1. Read the management file
-% 2. Filter expect files from criteria
-% 3. Construct FFT-Images from FFT-data
-% 4. Label and Feed FFT-Images into convNet and train
-% 5. Classify FFT-Images
-% 6. Evaluate result
+% 2. Return list of target as output
 % -------------------------------------------------------------------------
 
-%% 1. Read the Management File from directory
+%% 1.   Read the Management File from directory
 
-mode = 1; % program mode 0: construct images 1: training and classify
+config_filename = "config.json";
+config = readSetting(config_filename);
 
-% Read setting file
-if (mode == 1)
-    disp("Program begin with mode constructing images");
-else
-    disp("Program begin with mode training and classification");
+managefile_fullpath = fullfile(config.data_path, config.management_filename);
+list_sheets = sheetnames(managefile_fullpath);
+
+read_sheet = "2022.04.14";
+save_filename = "list_files/2022.04.14_all_data.mat";
+
+% Check if read_sheet exists in list_sheets or not
+if ~ismember(read_sheet, list_sheets)
+    error("Sheet does not exist in list.");
 end
 
-setting_filename = "setting.json";
-setting = readSetting(setting_filename);
-disp(["Finished reading setting file from ", setting_filename]);
+%% 2.   Return list of target as output
+%   2.1 output
+%       > list of filenames
+%       > list of subjects
+%       > list of data amount
+%   2.2 requirements
+%       > check if header exists
+%       > check data amount
+%       > check outliers 
+%           > gives output filename for outliers
+%           > resolves outliers with remove rows and re-indexing label
 
-table_manage = readManagementFile(setting);
-read_datasheet = setting.Sheet_mgn.read_sheet;
-num_datasheet = size(read_datasheet, 1);
-mgnment_file = fullfile( setting.Path.data_path ,setting.Path.manage_filename);
+tbl_data = readtable(managefile_fullpath, ...
+    "FileType","spreadsheet", ...
+    "Sheet",read_sheet);
 
-disp(["Finished reading management table from", setting.Path.manage_filename]);
+list_filenames  = tbl_data.Filename;
+list_subjects   = tbl_data.Subject;
 
-if (mode == 0)
-    %% 2. Filter expect files from criteria
-    disp("Begin filtering expected files due to criteria");
+
+% remove nonexist files from list
+file_exists = (list_filenames~="-") & ~isnan(tbl_data.Order);
+
+list_filenames = list_filenames(file_exists);
+list_subjects = list_subjects(file_exists); 
+list_dataamount = zeros(size(list_filenames, 1), 1);
+
+list_outliers = zeros(size(list_filenames, 1), 1);
+
+% Find data amount and ouliers
+for i = 1:size(list_filenames, 1)
+    file_fullpath = fullfile(config.data_path, read_sheet, list_filenames(i));
+    data = readmatrix(file_fullpath);
+
+    % determine whether data has header or not and extract only data
+    [row, col]= size(data);
+    if (col == config.data_size)
+        data = data(2:end, :); % remove first row, since program will not detect headers
+    else
+        data = data(:, config.header_size+1:end);
+    end
+
+    % determine if data has outliers
+    % check fft value max and min
+    if max(max(data)) > config.fft.upper_limit
+        list_outliers(i) = 1;
+    elseif min(min(data)) < config.fft.lower_limit
+        list_outliers(i) = 1;
+    end
     
-    [list_files, cell_datapath] = listFilesFromCondition(num_datasheet, mgnment_file, read_datasheet, setting);
-
-    %% 3. Construct FFT-Images from FFT-Data
-    img_height = 5; input_min = 0; input_max = 1000;
-    disp("Write Images into each subfolder ...");
-    cell_img = writeFFTImages(cell_datapath, read_datasheet, list_files, setting);
-    disp("Writing Image finished!");
-
-elseif (mode == 1)
-    %% 4. Feed FFT-Images into convNet and train network
-
-    % Indicate Labels for classes
-    imds = mappingLabels(read_datasheet, mgnment_file, setting);
-    
-    % Create CNN Network Layers
-    img = imread(string(imds.Files(1)));
-    input_size = size(img);
-
-    % TODO modify Model to support data and improve results
-    CNNlayers = createCNNlayers(input_size);
-
-    % Train Network 
-    train_test_ratio = 0.8;
-    labelCount = countEachLabel(imds);
-    [imdsTrain, imdsTest] = splitEachLabel(imds, train_test_ratio, 'randomize');
-    
-    options = trainingOptions('sgdm', ...
-            'InitialLearnRate',0.1, ...
-            'MaxEpochs',5, ...
-            'MiniBatchSize',16, ...
-            'Shuffle','every-epoch', ...
-            'ValidationData',imdsTest, ...
-            'ValidationFrequency',30, ...
-            'Verbose',false, ...
-            'ExecutionEnvironment','cpu', ...
-            'Plots','training-progress');
-
-    disp("Train model ....");
-    model = trainNetwork(imdsTrain,CNNlayers,options);
-
-    %% 5. Classify FFT-Images
-    %     disp("Classify network with Test Data ...");
-    %     [YPred, score] = classify(model, imdsTest);
-    %     YTest = imdsTest.Labels;
-
-    %     plotconfusion(YTest,YPred);
-
+    list_dataamount(i) = size(data, 1); % count rows 
 end
+
+% remove list_outliers
+list_filenames = list_filenames(list_outliers==0);
+list_subjects = list_subjects(list_outliers==0);
+list_dataamount = list_dataamount(list_outliers==0);
+
+list_files = {read_sheet, list_filenames, list_subjects, list_dataamount};
+save(save_filename, "list_files");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
