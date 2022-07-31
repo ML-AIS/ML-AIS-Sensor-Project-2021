@@ -13,7 +13,7 @@ The table below shows milestones, which we have to achieve. There maybe some cha
 | c        	| 1.) Evaluation of data set#1    2.) Submit Confusion Matrix                                                                                      	| 27/11/2021 (SAT) 	|  Done       	|
 | d        	| 1.) Adjust the thresholds of feature #1 and feature #10 in order to get a higher TPR (true positive rate) and lower FPR (false negative rate).  2.) Submit data set #2 and the confusion matrix of data set #2. 	| 18/12/2021       	| Done        	|
 | e        	| 1.) Conduct a test of the system when the engine of the car is running. 2.) Submit data set#3 and Confusion Matrix   	| 04/02/2022 (FRI)                 	| Done        	|
-| f       	| 1.) Adjust Thresolds for feature #1 and feature#10 for the running car 2.) Submit data set#4 and Confusion Matrix	| 07/03/2022 (MON)                	| In proress        	|
+| f       	| 1.) Adjust Thresolds for feature #1 and feature#10 for the running car 2.) Submit data set#4 and Confusion Matrix	| 07/03/2022 (MON)                	| Done       	|
 | g        	| 1.) Research on improvements 2.) Submit the measureing data and the result.                   	| 18/03/2022 (FRI)        	| Done on 30/04/2022 (SAT)
 | h        	| 1.) Submit the Report and Software (including essential things)                   	| 31/03/2022 (THU)        	| Done on 30/04/2022 (SAT)
 | j        	| Demonstration                   	| TBA       	|
